@@ -49,6 +49,10 @@ func (t *Transaction) BlockHeight() int {
 	return int(t.txResult.Height)
 }
 
+func (t *Transaction) Success() bool {
+	return t.txResult.Response.IsOK()
+}
+
 func (t *Transaction) responseError() string {
 	if t.txResult.Response.IsErr() {
 		return t.txResult.Response.Error.Error()
