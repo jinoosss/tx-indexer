@@ -257,6 +257,19 @@ type TransactionMessageInput struct {
 	VMParam *TransactionVMMessageInput `json:"vm_param,omitempty"`
 }
 
+// `TransactionResponse` is the processing result of the transaction.
+// It has `log`, `info`, `error`, and `data`.
+type TransactionResponse struct {
+	// The error value associated with the Transaction execution, if any.
+	Error string `json:"error"`
+	// The log value associated with the Transaction execution, if any.
+	Log string `json:"log"`
+	// The Info associated with the Transaction execution, if any.
+	Info string `json:"info"`
+	// The response data associated with the Transaction execution, if any.
+	Data string `json:"data"`
+}
+
 // `TransactionVmMessageInput` represents input parameters required when the message router is `vm`.
 type TransactionVMMessageInput struct {
 	// `MsgCallInput` represents input parameters required when the message type is `exec`.

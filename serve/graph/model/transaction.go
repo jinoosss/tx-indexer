@@ -16,6 +16,7 @@ import (
 type Transaction struct {
 	stdTx    *std.Tx
 	txResult *types.TxResult
+	response *TransactionResponse
 	messages []*TransactionMessage
 
 	mu           sync.Mutex
@@ -28,6 +29,7 @@ func NewTransaction(txResult *types.TxResult) *Transaction {
 		txResult: txResult,
 		messages: make([]*TransactionMessage, 0),
 		stdTx:    nil,
+		response: nil,
 	}
 }
 
@@ -47,24 +49,33 @@ func (t *Transaction) BlockHeight() int {
 	return int(t.txResult.Height)
 }
 
-func (t *Transaction) ResponseError() string {
-	if t.txResult.Response.Error == nil {
-		return ""
+func (t *Transaction) responseError() string {
+	if t.txResult.Response.IsErr() {
+		return t.txResult.Response.Error.Error()
 	}
 
-	return t.txResult.Response.Error.Error()
+	return ""
 }
 
-func (t *Transaction) ResponseLog() string {
+func (t *Transaction) responseLog() string {
 	return t.txResult.Response.Log
 }
 
-func (t *Transaction) ResponseInfo() string {
+func (t *Transaction) responseInfo() string {
 	return t.txResult.Response.Info
 }
 
-func (t *Transaction) ResponseData() []byte {
-	return t.txResult.Response.Data
+func (t *Transaction) responseData() string {
+	return string(t.txResult.Response.Data)
+}
+
+func (t *Transaction) Response() TransactionResponse {
+	return TransactionResponse{
+		Error: t.responseError(),
+		Log:   t.responseLog(),
+		Info:  t.responseInfo(),
+		Data:  t.responseData(),
+	}
 }
 
 func (t *Transaction) GasWanted() int {
