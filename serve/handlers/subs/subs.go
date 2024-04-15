@@ -44,6 +44,23 @@ func (h *Handler) newBlockFilter() string {
 	return h.filterManager.NewBlockFilter()
 }
 
+// NewBlockFilterHandler creates a block filter object
+func (h *Handler) NewBlockFilterHandler(
+	_ *metadata.Metadata,
+	params []any,
+) (any, *spec.BaseJSONError) {
+	// Check the params
+	if len(params) != 0 {
+		return nil, spec.GenerateInvalidParamCountError()
+	}
+
+	return h.newBlockFilter(), nil
+}
+
+func (h *Handler) newTransactionFilter() string {
+	return h.filterManager.NewBlockFilter()
+}
+
 // UninstallFilterHandler uninstalls a filter with given id
 func (h *Handler) UninstallFilterHandler(
 	_ *metadata.Metadata,
